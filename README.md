@@ -1,4 +1,4 @@
-# kalix-enum-test
+# kalix-codegen-test
 
 
 ## Designing
