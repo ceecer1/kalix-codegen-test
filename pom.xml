@@ -43,11 +43,44 @@
     </extensions>
 
     <plugins>
+
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.2</version>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>io.kx</groupId>
+                  <artifactId>proto-lib</artifactId>
+                  <version>1.5.11</version>
+                  <type>jar</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/protos</outputDirectory>
+                  <includes>**/*.proto</includes>
+                </artifactItem>
+              </artifactItems>
+              <overWriteReleases>false</overWriteReleases>
+              <overWriteSnapshots>true</overWriteSnapshots>
+            </configuration>
+          </execution>
+          <!--  #unpack-protos -->
+
+        </executions>
+      </plugin>
+
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.8.1</version>
         <configuration>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
           <source>${jdk.target}</source>
           <target>${jdk.target}</target>
           <compilerArgs>
@@ -61,31 +94,89 @@
         <artifactId>protobuf-maven-plugin</artifactId>
         <version>0.6.1</version>
 
+                    <configuration>
+        <!--&lt;!&ndash;              <protoSourceRoot>${project.build.directory}/classes</protoSourceRoot>&ndash;&gt;-->
+                      <clearOutputDirectory>false</clearOutputDirectory>
+                      <writeDescriptorSet>true</writeDescriptorSet>
+                      <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
+                      <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>
+<!--                      <descriptorSetFileName>user-function.desc</descriptorSetFileName>-->
+        <!--&lt;!&ndash;              <descriptorSetOutputDirectory>${project.build.directory}/generated-resources/protobuf/descriptor-sets</descriptorSetOutputDirectory>&ndash;&gt;-->
+        <!--&lt;!&ndash;              <checkStaleness>true</checkStaleness>&ndash;&gt;-->
+                      <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>
+                      <protocPlugins>
+                        <protocPlugin>
+                          <id>akka-grpc</id>
+                          <groupId>com.lightbend.akka.grpc</groupId>
+                          <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>
+                          <version>${akka-grpc.version}</version>
+                          <mainClass>akka.grpc.gen.Main</mainClass>
+                        </protocPlugin>
+                      </protocPlugins>
+        </configuration>
+
         <executions>
+
           <execution>
             <!-- generate Java code for protobuf types -->
-            <id>protobuf</id>
+            <id>protobuf-deps</id>
             <goals>
               <goal>compile</goal>
             </goals>
             <configuration>
-
-              <writeDescriptorSet>true</writeDescriptorSet>
-              <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
-              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>
-              <descriptorSetFileName>user-function.desc</descriptorSetFileName>
-              <checkStaleness>true</checkStaleness>
-              <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>
-              <protocPlugins>
-                <protocPlugin>
-                  <id>akka-grpc</id>
-                  <groupId>com.lightbend.akka.grpc</groupId>
-                  <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>
-                  <version>${akka-grpc.version}</version>
-                  <mainClass>akka.grpc.gen.Main</mainClass>
-                </protocPlugin>
-              </protocPlugins>
+              <protoSourceRoot>${project.build.directory}/protos</protoSourceRoot>
+              <descriptorSetFileName>user-function-deps.desc</descriptorSetFileName>
             </configuration>
+<!--              <protoSourceRoot>${project.build.directory}/protos</protoSourceRoot>-->
+<!--              <clearOutputDirectory>false</clearOutputDirectory>-->
+<!--              <writeDescriptorSet>true</writeDescriptorSet>-->
+<!--              <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>-->
+<!--              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>-->
+<!--              <descriptorSetFileName>user-function-deps.desc</descriptorSetFileName>-->
+<!--&lt;!&ndash;              <descriptorSetOutputDirectory>${project.build.directory}/generated-resources/protobuf-deps/descriptor-sets</descriptorSetOutputDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;              <checkStaleness>false</checkStaleness>&ndash;&gt;-->
+<!--              <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>-->
+<!--              <protocPlugins>-->
+<!--                <protocPlugin>-->
+<!--                  <id>akka-grpc</id>-->
+<!--                  <groupId>com.lightbend.akka.grpc</groupId>-->
+<!--                  <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>-->
+<!--                  <version>${akka-grpc.version}</version>-->
+<!--                  <mainClass>akka.grpc.gen.Main</mainClass>-->
+<!--                </protocPlugin>-->
+<!--              </protocPlugins>-->
+<!--            </configuration>-->
+          </execution>
+
+          <execution>
+            <!-- generate Java code for protobuf types -->
+            <id>protobuf-alf</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+            <configuration>
+              <descriptorSetFileName>user-function.desc</descriptorSetFileName>
+            </configuration>
+<!--            <configuration>-->
+<!--&lt;!&ndash;              <protoSourceRoot>${project.build.directory}/classes</protoSourceRoot>&ndash;&gt;-->
+<!--              <clearOutputDirectory>false</clearOutputDirectory>-->
+<!--              <writeDescriptorSet>true</writeDescriptorSet>-->
+<!--              <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>-->
+<!--              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>-->
+<!--              <descriptorSetFileName>user-function.desc</descriptorSetFileName>-->
+<!--&lt;!&ndash;              <descriptorSetOutputDirectory>${project.build.directory}/generated-resources/protobuf/descriptor-sets</descriptorSetOutputDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;              <checkStaleness>true</checkStaleness>&ndash;&gt;-->
+<!--              <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>-->
+<!--              <protocPlugins>-->
+<!--                <protocPlugin>-->
+<!--                  <id>akka-grpc</id>-->
+<!--                  <groupId>com.lightbend.akka.grpc</groupId>-->
+<!--                  <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>-->
+<!--                  <version>${akka-grpc.version}</version>-->
+<!--                  <mainClass>akka.grpc.gen.Main</mainClass>-->
+<!--                </protocPlugin>-->
+<!--              </protocPlugins>-->
+<!--            </configuration>-->
           </execution>
         </executions>
       </plugin>
@@ -253,6 +344,7 @@
           </execution>
         </executions>
         <configuration>
+
           <dockerImage>${dockerImage}:${dockerTag}</dockerImage>
           <mainClass>${mainClass}</mainClass>
           <integrationTestSourceDirectory>src/it/java</integrationTestSourceDirectory>
@@ -305,7 +397,7 @@
     <dependency>
       <groupId>io.kx</groupId>
       <artifactId>proto-lib</artifactId>
-      <version>1.5.0</version>
+      <version>1.5.1</version>
     </dependency>
     <dependency>
       <groupId>io.kalix</groupId>
