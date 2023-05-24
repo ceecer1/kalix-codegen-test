@@ -127,7 +127,7 @@
             <configuration>
               <writeDescriptorSet>true</writeDescriptorSet>
               <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
-              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>              
+              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>
               <descriptorSetFileName>user-function.desc</descriptorSetFileName>
             </configuration>
           </execution>
