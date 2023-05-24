@@ -59,7 +59,7 @@
                 <artifactItem>
                   <groupId>io.kx</groupId>
                   <artifactId>proto-lib</artifactId>
-                  <version>1.5.11</version>
+                  <version>1.5.1</version>
                   <type>jar</type>
                   <overWrite>true</overWrite>
                   <outputDirectory>${project.build.directory}/protos</outputDirectory>
@@ -93,32 +93,26 @@
         <groupId>org.xolstice.maven.plugins</groupId>
         <artifactId>protobuf-maven-plugin</artifactId>
         <version>0.6.1</version>
-
-                    <configuration>
-        <!--&lt;!&ndash;              <protoSourceRoot>${project.build.directory}/classes</protoSourceRoot>&ndash;&gt;-->
-                      <clearOutputDirectory>false</clearOutputDirectory>
-                      <writeDescriptorSet>true</writeDescriptorSet>
-                      <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
-                      <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>
-<!--                      <descriptorSetFileName>user-function.desc</descriptorSetFileName>-->
-        <!--&lt;!&ndash;              <descriptorSetOutputDirectory>${project.build.directory}/generated-resources/protobuf/descriptor-sets</descriptorSetOutputDirectory>&ndash;&gt;-->
-        <!--&lt;!&ndash;              <checkStaleness>true</checkStaleness>&ndash;&gt;-->
-                      <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>
-                      <protocPlugins>
-                        <protocPlugin>
-                          <id>akka-grpc</id>
-                          <groupId>com.lightbend.akka.grpc</groupId>
-                          <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>
-                          <version>${akka-grpc.version}</version>
-                          <mainClass>akka.grpc.gen.Main</mainClass>
-                        </protocPlugin>
-                      </protocPlugins>
+        <configuration>
+          <clearOutputDirectory>false</clearOutputDirectory>
+          <writeDescriptorSet>true</writeDescriptorSet>
+          <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
+          <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>
+          <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>
+          <protocPlugins>
+            <protocPlugin>
+              <id>akka-grpc</id>
+              <groupId>com.lightbend.akka.grpc</groupId>
+              <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>
+              <version>${akka-grpc.version}</version>
+              <mainClass>akka.grpc.gen.Main</mainClass>
+            </protocPlugin>
+          </protocPlugins>
         </configuration>
 
         <executions>
-
           <execution>
-            <!-- generate Java code for protobuf types -->
+            <!-- generate Java code for protobuf types from unpacked dependencies-->
             <id>protobuf-deps</id>
             <goals>
               <goal>compile</goal>
@@ -127,25 +121,6 @@
               <protoSourceRoot>${project.build.directory}/protos</protoSourceRoot>
               <descriptorSetFileName>user-function-deps.desc</descriptorSetFileName>
             </configuration>
-<!--              <protoSourceRoot>${project.build.directory}/protos</protoSourceRoot>-->
-<!--              <clearOutputDirectory>false</clearOutputDirectory>-->
-<!--              <writeDescriptorSet>true</writeDescriptorSet>-->
-<!--              <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>-->
-<!--              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>-->
-<!--              <descriptorSetFileName>user-function-deps.desc</descriptorSetFileName>-->
-<!--&lt;!&ndash;              <descriptorSetOutputDirectory>${project.build.directory}/generated-resources/protobuf-deps/descriptor-sets</descriptorSetOutputDirectory>&ndash;&gt;-->
-<!--&lt;!&ndash;              <checkStaleness>false</checkStaleness>&ndash;&gt;-->
-<!--              <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>-->
-<!--              <protocPlugins>-->
-<!--                <protocPlugin>-->
-<!--                  <id>akka-grpc</id>-->
-<!--                  <groupId>com.lightbend.akka.grpc</groupId>-->
-<!--                  <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>-->
-<!--                  <version>${akka-grpc.version}</version>-->
-<!--                  <mainClass>akka.grpc.gen.Main</mainClass>-->
-<!--                </protocPlugin>-->
-<!--              </protocPlugins>-->
-<!--            </configuration>-->
           </execution>
 
           <execution>
@@ -157,26 +132,6 @@
             <configuration>
               <descriptorSetFileName>user-function.desc</descriptorSetFileName>
             </configuration>
-<!--            <configuration>-->
-<!--&lt;!&ndash;              <protoSourceRoot>${project.build.directory}/classes</protoSourceRoot>&ndash;&gt;-->
-<!--              <clearOutputDirectory>false</clearOutputDirectory>-->
-<!--              <writeDescriptorSet>true</writeDescriptorSet>-->
-<!--              <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>-->
-<!--              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>-->
-<!--              <descriptorSetFileName>user-function.desc</descriptorSetFileName>-->
-<!--&lt;!&ndash;              <descriptorSetOutputDirectory>${project.build.directory}/generated-resources/protobuf/descriptor-sets</descriptorSetOutputDirectory>&ndash;&gt;-->
-<!--&lt;!&ndash;              <checkStaleness>true</checkStaleness>&ndash;&gt;-->
-<!--              <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>-->
-<!--              <protocPlugins>-->
-<!--                <protocPlugin>-->
-<!--                  <id>akka-grpc</id>-->
-<!--                  <groupId>com.lightbend.akka.grpc</groupId>-->
-<!--                  <artifactId>akka-grpc-scalapb-protoc-plugin_2.12</artifactId>-->
-<!--                  <version>${akka-grpc.version}</version>-->
-<!--                  <mainClass>akka.grpc.gen.Main</mainClass>-->
-<!--                </protocPlugin>-->
-<!--              </protocPlugins>-->
-<!--            </configuration>-->
           </execution>
         </executions>
       </plugin>
