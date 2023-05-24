@@ -94,9 +94,6 @@
         <version>0.6.1</version>
         <configuration>
           <clearOutputDirectory>false</clearOutputDirectory>
-          <writeDescriptorSet>true</writeDescriptorSet>
-          <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
-          <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>
           <protocArtifact>com.google.protobuf:protoc:3.19.2:exe:${os.detected.classifier}</protocArtifact>
           <protocPlugins>
             <protocPlugin>
@@ -118,7 +115,6 @@
             </goals>
             <configuration>
               <protoSourceRoot>${project.build.directory}/protos</protoSourceRoot>
-              <descriptorSetFileName>user-function-deps.desc</descriptorSetFileName>
             </configuration>
           </execution>
 
@@ -129,6 +125,9 @@
               <goal>compile</goal>
             </goals>
             <configuration>
+              <writeDescriptorSet>true</writeDescriptorSet>
+              <includeSourceInfoInDescriptorSet>true</includeSourceInfoInDescriptorSet>
+              <includeDependenciesInDescriptorSet>true</includeDependenciesInDescriptorSet>              
               <descriptorSetFileName>user-function.desc</descriptorSetFileName>
             </configuration>
           </execution>
